@@ -70,7 +70,7 @@ function addTodo(event) {
   list.append(
     `<li class ="item">
         <span class ="item-text">${target}</span>` +
-      `<button class="item-remove">Remove</button>
+      `<button class="item-remove">Удалить</button>
       </li>`
   );
 

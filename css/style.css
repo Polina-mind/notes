@@ -15,7 +15,7 @@
 
 .list {
   padding-left: 0;
-  width: 500px;
+  width: 450px;
   list-style: none;
 }
 
@@ -41,8 +41,9 @@
 }
 
 .item-remove {
+  margin-right: 15px;
   /* position: absolute; */
-  right: 0;
-  top: 0;
+  /* right: 0;
+  top: 0; */
   height: 21px;
 }

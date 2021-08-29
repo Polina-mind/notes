@@ -124,7 +124,7 @@ function searchText(event) {
   console.log(todos);
 
   const findItem = todos.filter((todo) => {
-    if (todo.text === target) {
+    if (todo.text.includes(target)) {
       return todo;
     }
   });

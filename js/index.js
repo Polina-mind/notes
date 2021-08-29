@@ -1,20 +1,4 @@
 // import { saveTo, getFrom } from "./localStorage";
-const saveToLocalStorage = function saveTo(todosQueue) {
-  const currentTodosQueue = localStorage.getItem("todosQueue");
-
-  if (currentTodosQueue) {
-    localStorage.removeItem("todosQueue");
-  }
-  localStorage.setItem("todosQueue", JSON.stringify(todosQueue));
-};
-
-const getFromLocalStorage = function getFrom() {
-  const currentTodosQueue = localStorage.getItem("todosQueue");
-
-  return JSON.parse(currentTodosQueue);
-};
-
-// console.log(saveToLocalStorage, getFromLocalStorage);
 
 const list = $(".list");
 const item = $(".item");
@@ -24,25 +8,13 @@ const remove = $(".item-remove");
 const search = $("#search");
 const searchButton = $("#search-button");
 
-// let todos = [];
-let todos = [
-  {
-    text: "Buy milk",
-    done: false,
-  },
-  {
-    text: "Play with dog",
-    done: true,
-  },
-];
+let todos = [];
 
 $(document).ready(function () {
   todos = getFromLocalStorage();
-  console.log(todos);
   if (!todos) {
-    saveToLocalStorage((todos = []));
+    saveToLocalStorage([]);
   }
-
   renderList(todos);
 
   item.click(isComplete);
@@ -65,7 +37,6 @@ function addTodo(event) {
   });
 
   saveToLocalStorage(todos);
-  console.log(todos);
 
   list.append(
     `<li class ="item">
@@ -75,7 +46,6 @@ function addTodo(event) {
   );
 
   $(".item-remove").bind("click", removeTodo);
-  $(".item").bind("click", isComplete);
 
   input.val("");
 }
@@ -90,7 +60,6 @@ function removeTodo(event) {
   );
 
   saveToLocalStorage(todos);
-  console.log(todos);
 
   target.parent().remove();
 }
@@ -107,6 +76,7 @@ function isComplete(event) {
     return todo;
   });
 
+  // console.log(todos);
   saveToLocalStorage(todos);
 
   target.toggleClass("done");
@@ -121,15 +91,12 @@ function searchText(event) {
   }
 
   todos = getFromLocalStorage();
-  console.log(todos);
 
-  const findItem = todos.filter((todo) => {
-    if (todo.text.includes(target)) {
-      return todo;
-    }
-  });
+  const findItem = todos.filter((todo) => todo.text.includes(target));
 
   renderList(findItem);
+  list.bind("click", isComplete);
+
   $(".mbox").append(`<button class="goBack">Вернуться</button>`);
   $(".goBack").bind("click", isBack);
 
@@ -138,7 +105,9 @@ function searchText(event) {
 
 function renderList(array) {
   $(".list .item").remove();
+  list.remove("click", isComplete);
   $(".goBack").remove();
+  $(".goBack").remove("click", isBack);
 
   const template = array.map(
     ({ done, text }) =>
@@ -151,11 +120,20 @@ function renderList(array) {
   list.append(template);
 
   $(".item-remove").bind("click", removeTodo);
-  $(".item").bind("click", isComplete);
+
+  list.bind("click", isComplete);
 }
 
 function isBack(event) {
   event.preventDefault();
-
   renderList(todos);
 }
+
+const saveToLocalStorage = function saveTo(todosQueue) {
+  localStorage.setItem("todosQueue", JSON.stringify(todosQueue));
+};
+
+const getFromLocalStorage = function getFrom() {
+  const currentTodosQueue = localStorage.getItem("todosQueue");
+  return JSON.parse(currentTodosQueue);
+};

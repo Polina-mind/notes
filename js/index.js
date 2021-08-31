@@ -26,18 +26,20 @@ function addTodo(event) {
   if (!target) {
     return;
   }
+  const id = Math.random() * (10 - 1) + 1;
 
   todos = getFromLocalStorage();
 
   todos.push({
     text: `${target}`,
     done: false,
+    id: `${id}`,
   });
 
   saveToLocalStorage(todos);
 
   list.append(
-    `<li class ="item">
+    `<li class ="item" id = ${id}>
         <span class ="item-text">${target}</span>` +
       `<button class="item-remove">Удалить</button>
       </li>`
@@ -79,8 +81,8 @@ function renderList(array) {
   list.children().remove();
 
   const template = array.map(
-    ({ done, text }) =>
-      `<li class ="item">
+    ({ done, text, id }) =>
+      `<li class ="item" id = ${id}>
         <span class ="item-text ${done ? "done" : ""}">${text}</span>` +
       `<button class="item-remove">Удалить</button>
       </li>`
@@ -102,11 +104,12 @@ function renderList(array) {
 
 function removeTodo(event) {
   const target = $(event.target);
+  const attrId = target.parent().attr("id");
 
   todos = getFromLocalStorage();
 
   for (let i = 0; i < todos.length; i += 1) {
-    if (todos[i].text === target.parent()[0].firstElementChild.innerText) {
+    if (todos[i].id === attrId) {
       todos.splice(i, 1);
       break;
     }
@@ -121,11 +124,12 @@ function isComplete(event) {
   event.preventDefault();
 
   const target = $(event.target);
+  const attrId = target.parent().attr("id");
 
   todos = getFromLocalStorage();
 
   for (let i = 0; i < todos.length; i += 1) {
-    if (todos[i].text === target.html()) {
+    if (todos[i].id === attrId) {
       todos[i].done = todos[i].done ? false : true;
       break;
     }

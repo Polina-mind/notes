@@ -9,10 +9,11 @@ const searchButton = $("#search-button");
 let todos = [];
 
 $(document).ready(function () {
-  todos = getFromLocalStorage();
-  if (!todos) {
+  if (!getFromLocalStorage()) {
     saveToLocalStorage([]);
   }
+  todos = getFromLocalStorage();
+
   renderList(todos);
 
   add.click(addTodo);
@@ -22,6 +23,8 @@ $(document).ready(function () {
 function addTodo(event) {
   event.preventDefault();
   const target = input.val();
+
+  console.log(target);
 
   if (!target) {
     return;
